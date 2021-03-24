@@ -16,6 +16,6 @@ public class Circle extends Figure {
 
 		g.setColor(this.color);
 		graphics2D.setStroke(new BasicStroke(this.thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-		graphics2D.drawOval(this.position.getX() + radius, this.position.getY() + radius, radius, radius);
+		graphics2D.drawOval(this.position.getX(), this.position.getY(), radius, radius);
 	}
 }

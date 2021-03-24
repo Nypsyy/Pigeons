@@ -16,6 +16,6 @@ public class Square extends Figure {
 
 		g.setColor(this.color);
 		graphics2D.setStroke(new BasicStroke(this.thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-		graphics2D.drawRect(this.position.getX() + this.length, this.position.getY() + this.length, this.length, this.length);
+		graphics2D.drawRect(this.position.getX(), this.position.getY(), this.length, this.length);
 	}
 }
