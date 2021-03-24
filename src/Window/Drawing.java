@@ -1,7 +1,5 @@
 package Window;
 
-import Shape.Circle;
-import Shape.Square;
 import Object.Pigeon;
 import Object.Food;
 
@@ -9,16 +7,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Drawing extends JPanel {
-	private final Pigeon pigeon;
-	private final Food food;
+	private final ArrayList<Pigeon> pigeons = new ArrayList<>();
+	private final ArrayList<Food> food = new ArrayList<>();
 
 	public Drawing() {
-		this.pigeon = new Pigeon();
-		this.food = new Food();
-
 		initClickListener();
 	}
 
@@ -26,12 +22,12 @@ public class Drawing extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		for (Circle circle : this.pigeon.getPigeons()) {
-			circle.draw(g);
+		for (Pigeon pigeon : this.pigeons) {
+			pigeon.getCircle().draw(g);
 		}
 
-		for (Square square : this.food.getFood()) {
-			square.draw(g);
+		for (Food food : this.food) {
+			food.getSquare().draw(g);
 		}
 	}
 
@@ -46,14 +42,14 @@ public class Drawing extends JPanel {
 	}
 
 	private void spawnFood(int x, int y) {
-		this.food.addFood(x, y);
+		this.food.add(new Food(x, y));
 		repaint();
 	}
 
 	public void spawnPigeons(int number) {
 		Random random = new Random();
 		for (int i = 0; i < number; i++) {
-			this.pigeon.addPigeon(random.nextInt(getSize().width), random.nextInt(getSize().height));
+			this.pigeons.add(new Pigeon(random.nextInt(getSize().width), random.nextInt(getSize().height)));
 		}
 	}
 }

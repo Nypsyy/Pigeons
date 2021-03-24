@@ -3,16 +3,20 @@ package Object;
 import Shape.Circle;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class Pigeon {
-	private final ArrayList<Circle> pigeons = new ArrayList<>();
+	private static final Color sleep = Color.BLACK;
+	private static final Color run = Color.BLUE;
+	private static final int radius = 25;
+	private static final int thickness = 1;
 
-	public void addPigeon(int x, int y) {
-		this.pigeons.add(new Circle(x, y, Color.BLACK, 25, 1));
+	private final Circle circle;
+
+	public Pigeon(int x, int y) {
+		this.circle = new Circle(x, y, sleep, radius, thickness);
 	}
 
-	public ArrayList<Circle> getPigeons() {
-		return this.pigeons;
+	public Circle getCircle() {
+		return this.circle;
 	}
 }

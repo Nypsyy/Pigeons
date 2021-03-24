@@ -3,17 +3,19 @@ package Object;
 import Shape.Square;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class Food {
-	private final ArrayList<Square> food = new ArrayList<>();
+	private static final Color color = Color.RED;
+	private static final int length = 10;
+	private static final int thickness = 1;
 
-	public void addFood(int x, int y) {
-		// TODO : Random
-		this.food.add(new Square(x, y, Color.RED, 10, 1));
+	private final Square square;
+
+	public Food(int x, int y) {
+		this.square = new Square(x, y, color, length, thickness);
 	}
 
-	public ArrayList<Square> getFood() {
-		return this.food;
+	public Square getSquare() {
+		return this.square;
 	}
 }
