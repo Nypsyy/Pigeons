@@ -17,6 +17,8 @@ public class Window extends JFrame {
 
         configureContainer();
         configureWindow();
+
+        this.drawing.spawnPigeons(10);
     }
 
     private void configureWindow() {
@@ -27,6 +29,6 @@ public class Window extends JFrame {
 
     private void configureContainer() {
         Container container = getContentPane();
-        container.add(drawing, BorderLayout.CENTER);
+        container.add(this.drawing, BorderLayout.CENTER);
     }
 }

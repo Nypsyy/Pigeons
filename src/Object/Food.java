@@ -10,10 +10,10 @@ public class Food {
 
 	public void addFood(int x, int y) {
 		// TODO : Random
-		food.add(new Square(x, y, Color.CYAN, 50, 1));
+		this.food.add(new Square(x, y, Color.RED, 10, 1));
 	}
 
 	public ArrayList<Square> getFood() {
-		return food;
+		return this.food;
 	}
 }
