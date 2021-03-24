@@ -2,12 +2,12 @@ package Shape;
 
 import java.awt.*;
 
-public class Circle extends Figure {
-	private final int radius;
+public class Square extends Figure {
+	private final int length;
 
-	public Circle(int x, int y, Color color, int radius, int thickness) {
+	public Square(int x, int y, Color color, int length, int thickness) {
 		super(x, y, color, thickness);
-		this.radius = Math.abs(radius);
+		this.length = Math.abs(length);
 	}
 
 	@Override
@@ -16,6 +16,6 @@ public class Circle extends Figure {
 
 		g.setColor(this.color);
 		graphics2D.setStroke(new BasicStroke(this.thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-		graphics2D.drawOval(this.position.getX() + radius, this.position.getY() + radius, radius, radius);
+		graphics2D.drawRect(this.position.getX() + this.length, this.position.getY() + this.length, this.length, this.length);
 	}
 }

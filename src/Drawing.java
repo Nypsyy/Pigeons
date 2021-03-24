@@ -1,14 +1,16 @@
 import Shape.Circle;
+import Shape.Square;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Drawing extends JPanel {
 	private final Pigeon pigeon;
-	// TODO : Food
+	private final Food food;
 
 	public Drawing() {
 		pigeon = new Pigeon(1);
+		food = new Food();
 	}
 
 	@Override
@@ -17,6 +19,10 @@ public class Drawing extends JPanel {
 
 		for (Circle circle : pigeon.getPigeons()) {
 			circle.draw(g);
+		}
+
+		for (Square square : food.getFood()) {
+			square.draw(g);
 		}
 	}
 }
