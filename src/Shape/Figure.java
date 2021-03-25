@@ -13,5 +13,13 @@ public abstract class Figure {
 		this.thickness = Math.abs(thickness);
 	}
 
+	public Point getPosition() {
+		return this.position;
+	}
+
+	public void setColor(Color color) {
+		this.color = color;
+	}
+
 	public abstract void draw(Graphics g);
 }
