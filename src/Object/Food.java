@@ -15,7 +15,7 @@ public class Food {
 		this.square = new Square(x, y, color, length, thickness);
 	}
 
-	public Square getSquare() {
+	public synchronized Square getSquare() {
 		return this.square;
 	}
 }

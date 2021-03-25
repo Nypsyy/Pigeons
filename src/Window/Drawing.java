@@ -47,12 +47,7 @@ public class Drawing extends JPanel {
 	private void spawnFood(int x, int y) {
 		this.food.add(new Food(x, y));
 		repaint();
-
-		synchronized (this.pigeons) {
-			for (Pigeon pigeon : this.pigeons) {
-				pigeon.foodNotify();
-			}
-		}
+		notifyPigeons();
 	}
 
 	public void spawnPigeons(int number) {
@@ -64,7 +59,17 @@ public class Drawing extends JPanel {
 		}
 	}
 
-	public Food getFreshFood() {
-		return this.food.size() > 0 ? this.food.get(0) : null;
+	private void notifyPigeons() {
+		synchronized (this.food) {
+			this.food.notifyAll();
+		}
+	}
+
+	public synchronized ArrayList<Food> getFood() {
+		return this.food;
+	}
+
+	public synchronized Food getFreshFood() {
+		return this.food.size() > 0 ? this.food.get(this.food.size() - 1) : null;
 	}
 }

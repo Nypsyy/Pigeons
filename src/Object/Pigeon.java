@@ -20,62 +20,85 @@ public class Pigeon implements Runnable {
 	private final Drawing drawing;
 	private final Thread thread;
 	// TODO : Temp
+
 	private int speed = 5;
 
 	public Pigeon(int x, int y, Drawing drawing) {
 		this.circle = new Circle(x, y, sleep, radius, thickness);
 		this.drawing = drawing;
+		//this.speed = new Random().nextInt(maxSpeed);
 
-		// TODO : Remove
+		// TODO : Remove ?
 		this.thread = new Thread(this);
-		//thread.start();
+		this.thread.start();
 	}
 
 	public Circle getCircle() {
 		return this.circle;
 	}
 
-	// TODO : Update notify system
-	public void foodNotify() {
-		this.destination = computeNextPosition();
-		thread.start();
-	}
-
 	@Override
 	public void run() {
-		// TODO : Edit
-		this.circle.setColor(run);
-		while (this.destination != null) {
+		while (true) {
+			waitForEvent();
+		}
+	}
+
+	private void waitForEvent() {
+		//synchronized (this.drawing.getFood()) {
 			try {
-				Thread.sleep(50);
-				this.circle.getPosition().update(this.destination.getX(), this.destination.getY());
-				this.drawing.repaint();
-				this.destination = computeNextPosition();
+				System.out.println("Wait " + this.thread.getName());
+				this.drawing.getFood().wait();
+				System.out.println("Wait2 " + this.thread.getName());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			System.out.println("Food " + this.thread.getName());
+			if (this.drawing.getFood().isEmpty()) {
+				System.out.println("Jump Scare");
+			} else {
+				runFood();
+			}
+		//}
+	}
+
+	private void runFood() {
+		this.circle.setColor(run);
+		updateDestination();
+		while (!this.drawing.getFood().isEmpty() && this.destination != null) {
+			this.circle.getPosition().update(this.destination.getX(), this.destination.getY());
+			this.drawing.repaint();
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			updateDestination();
 		}
 		this.circle.setColor(sleep);
 		this.drawing.repaint();
 	}
 
-	private Point computeNextPosition() {
+	private void updateDestination() {
 		Food food = this.drawing.getFreshFood();
-		if (food != null) {
-			Point foodPoint = food.getSquare().getPosition();
-			Point pigeonPoint = this.circle.getPosition();
 
-			float x = foodPoint.getX() - pigeonPoint.getX();
-			float y = foodPoint.getY() - pigeonPoint.getY();
-			float length = (float) Math.sqrt(x*x + y*y);
-
-			x /= length;
-			y /= length;
-			x *= this.speed;
-			y *= this.speed;
-
-			return new Point((int) x, (int) y);
+		if (food == null) {
+			this.destination = null;
+			return;
 		}
-		return null;
+
+		Point foodPoint = food.getSquare().getPosition();
+		Point pigeonPoint = this.circle.getPosition();
+
+		float x = foodPoint.getX() - pigeonPoint.getX();
+		float y = foodPoint.getY() - pigeonPoint.getY();
+		float length = (float) Math.sqrt(x*x + y*y);
+
+		x /= length;
+		y /= length;
+		x *= this.speed;
+		y *= this.speed;
+
+		this.destination = new Point((int) x, (int) y);
 	}
 }
