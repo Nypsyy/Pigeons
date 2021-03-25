@@ -5,8 +5,8 @@ public class Point {
 	private int y;
 
 	public Point(int x, int y) {
-		this.x = Math.abs(x);
-		this.y = Math.abs(y);
+		this.x = x;
+		this.y = y;
 	}
 
 	public int getX() {
@@ -18,7 +18,7 @@ public class Point {
 	}
 
 	public void update(int x, int y) {
-		this.x += Math.abs(x);
-		this.y += Math.abs(y);
+		this.x += x;
+		this.y += y;
 	}
 }

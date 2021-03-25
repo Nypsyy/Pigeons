@@ -8,8 +8,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.Random;
 
 public class Drawing extends JPanel {
@@ -49,14 +47,24 @@ public class Drawing extends JPanel {
 	private void spawnFood(int x, int y) {
 		this.food.add(new Food(x, y));
 		repaint();
+
+		synchronized (this.pigeons) {
+			for (Pigeon pigeon : this.pigeons) {
+				pigeon.foodNotify();
+			}
+		}
 	}
 
 	public void spawnPigeons(int number) {
+		Random random = new Random();
 		synchronized (this.pigeons) {
-			Random random = new Random();
 			for (int i = 0; i < number; i++) {
 				this.pigeons.add(new Pigeon(random.nextInt(getSize().width), random.nextInt(getSize().height), this));
 			}
 		}
+	}
+
+	public Food getFreshFood() {
+		return this.food.size() > 0 ? this.food.get(0) : null;
 	}
 }
