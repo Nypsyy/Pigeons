@@ -48,9 +48,10 @@ public class Pigeon extends MovingEntity {
 		Point foodPoint = freshFood.getFigure().getPosition();
 		Point pigeonPoint = figure.getPosition();
 
-		float x = foodPoint.getX() - pigeonPoint.getX();
-		float y = foodPoint.getY() - pigeonPoint.getY();
-		float length = (float) Math.sqrt(x*x + y*y);
+            if (crumb == null) {
+                this.destination = null;
+                return;
+            }
 
 		x = x / length * speed;
 		y = y / length * speed;

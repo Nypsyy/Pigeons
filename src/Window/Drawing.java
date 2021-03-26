@@ -18,9 +18,9 @@ public class Drawing extends JPanel {
 		initRepaintTimer();
 	}
 
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
 		for (Pigeon pigeon : world.getPigeons()) {
 			pigeon.getFigure().draw(g);
