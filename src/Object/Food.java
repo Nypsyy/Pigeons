@@ -2,20 +2,39 @@ package Object;
 
 import Shape.Square;
 
-import java.awt.*;
+import Window.Configuration;
+import Window.World;
 
-public class Food {
-	private static final Color color = Color.RED;
-	private static final int length = 10;
-	private static final int thickness = 1;
-
-	private final Square square;
+public class Food extends Entity {
+	private final int freshTimer;
+	private boolean isFresh;
 
 	public Food(int x, int y) {
-		this.square = new Square(x, y, color, length, thickness);
+		super(Configuration.foodDefaultColor, Configuration.foodEventColor, Configuration.foodSize, Configuration.foodThickness);
+
+		figure = new Square(x, y, defaultColor, size, thickness);
+		freshTimer = Configuration.freshTimer;
+		isFresh = true;
 	}
 
-	public synchronized Square getSquare() {
-		return this.square;
+	public boolean isFresh() {
+		return isFresh;
+	}
+
+	@Override
+	public void run() {
+		try {
+			Thread.sleep(freshTimer);
+		} catch (InterruptedException e) {
+			thread.interrupt();
+		}
+		isFresh = false;
+		figure.setColor(eventColor);
+		try {
+			Thread.sleep(freshTimer / 2);
+		} catch (InterruptedException e) {
+			thread.interrupt();
+		}
+		World.eatFood(this);
 	}
 }

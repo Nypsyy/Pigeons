@@ -7,31 +7,32 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Random;
 
 public class Drawing extends JPanel {
-	private final ArrayList<Pigeon> pigeons = new ArrayList<>();
-	private final ArrayList<Food> food = new ArrayList<>();
+	private final World world;
 
-	public Drawing() {
+	public Drawing(World world) {
+		this.world = world;
+
 		initClickListener();
+		initRepaintTimer();
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		synchronized (this.pigeons) {
-			for (Pigeon pigeon : this.pigeons) {
-				pigeon.getCircle().draw(g);
-			}
+		for (Pigeon pigeon : world.getPigeons()) {
+			pigeon.getFigure().draw(g);
 		}
 
-		// TODO : Synchronized ?
-		for (Food food : this.food) {
-			food.getSquare().draw(g);
+		for (Food food : world.getFood()) {
+			food.getFigure().draw(g);
 		}
+	}
+
+	private void initRepaintTimer() {
+		new Timer(Configuration.screenRefreshRate, e -> repaint()).start();
 	}
 
 	private void initClickListener() {
@@ -39,37 +40,16 @@ public class Drawing extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				super.mousePressed(e);
-				spawnFood(e.getX(), e.getY());
+				// TODO : Fix when food spawn first
+				if (e.getButton() == MouseEvent.BUTTON1) {
+					world.addFood(e.getX(), e.getY());
+				} else if (e.getButton() == MouseEvent.BUTTON3) {
+					world.addPigeon(e.getX(), e.getY());
+				} else if (e.getButton() == MouseEvent.BUTTON2) {
+					// TODO : Fix
+					//world.resetWorld();
+				}
 			}
 		});
-	}
-
-	private void spawnFood(int x, int y) {
-		this.food.add(new Food(x, y));
-		repaint();
-		notifyPigeons();
-	}
-
-	public void spawnPigeons(int number) {
-		Random random = new Random();
-		synchronized (this.pigeons) {
-			for (int i = 0; i < number; i++) {
-				this.pigeons.add(new Pigeon(random.nextInt(getSize().width), random.nextInt(getSize().height), this));
-			}
-		}
-	}
-
-	private void notifyPigeons() {
-		synchronized (this.food) {
-			this.food.notifyAll();
-		}
-	}
-
-	public synchronized ArrayList<Food> getFood() {
-		return this.food;
-	}
-
-	public synchronized Food getFreshFood() {
-		return this.food.size() > 0 ? this.food.get(this.food.size() - 1) : null;
 	}
 }
