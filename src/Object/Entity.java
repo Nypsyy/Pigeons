@@ -20,7 +20,6 @@ public abstract class Entity implements Runnable {
 		this.thickness = thickness;
 
 		thread = new Thread(this);
-		thread.start();
 	}
 
 	public abstract void run();

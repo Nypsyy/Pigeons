@@ -6,48 +6,64 @@ import Object.Food;
 import java.util.ArrayList;
 
 public class World {
-	private final ArrayList<Pigeon> pigeons;
-	private static ArrayList<Food> food = null;
+    private static ArrayList<Pigeon> pigeons;
+    private static ArrayList<Food> food = null;
 
-	public World() {
-		pigeons = new ArrayList<>();
-		food = new ArrayList<>();
-	}
+    public synchronized static void removeFood(Food f) {
+        if (f != null) {
+            if (f.getThread().isAlive())
+                f.getThread().interrupt();
+            food.remove(f);
+        }
+    }
 
-	public ArrayList<Pigeon> getPigeons() {
-		return pigeons;
-	}
+    public synchronized static void resetPigeonThreateningTimers() {
+        for (Pigeon p : pigeons) {
+            p.resetThreatening();
+        }
+    }
 
-	public ArrayList<Food> getFood() {
-		return food;
-	}
+    public World() {
+        pigeons = new ArrayList<>();
+        food = new ArrayList<>();
+    }
 
-	public static Food getFreshFood() {
-		return food.size() > 0 && food.get(food.size() - 1).isFresh() ? food.get(food.size() - 1) : null;
-	}
+    public ArrayList<Pigeon> getPigeons() {
+        return pigeons;
+    }
 
-	public static void eatFood(Food freshFood) {
-		freshFood.getThread().interrupt();
-		food.remove(freshFood);
-	}
+    public ArrayList<Food> getFood() {
+        return food;
+    }
 
-	public void addFood(int x, int y) {
-		food.add(new Food(x, y));
-	}
+    public synchronized static Food getFreshFood() {
+        return food.size() > 0 && food.get(food.size() - 1).isFresh() ? food.get(food.size() - 1) : null;
+    }
 
-	public void addPigeon(int x, int y) {
-		pigeons.add(new Pigeon(x, y));
-	}
+    public synchronized static void eatFood(Food freshFood) {
+        if (freshFood.getThread().isAlive())
+            freshFood.getThread().interrupt();
 
-	public void resetWorld() {
-		for (int i = 0; i < pigeons.size(); i++) {
-			pigeons.get(i).getThread().interrupt();
-		}
-		pigeons.clear();
+        resetPigeonThreateningTimers();
 
-		for (int i = 0; i < food.size(); i++) {
-			food.get(i).getThread().interrupt();
-		}
-		food.clear();
-	}
+        removeFood(freshFood);
+    }
+
+    public void addFood(int x, int y) {
+        food.add(new Food(x, y));
+    }
+
+    public void addPigeon(int x, int y) {
+        pigeons.add(new Pigeon(x, y));
+    }
+
+    public synchronized void resetWorld() {
+        for (Pigeon p : pigeons)
+            p.getThread().interrupt();
+        pigeons.clear();
+
+        for (Food f : food)
+            f.getThread().interrupt();
+        food.clear();
+    }
 }
