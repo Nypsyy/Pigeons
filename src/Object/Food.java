@@ -5,9 +5,23 @@ import Shape.Square;
 import Window.Configuration;
 import Window.World;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class Food extends Entity {
     private final int freshTimer;
     private boolean isFresh;
+
+    public Timer lifeTimer;
+
+    private void delete() {
+        World.removeFood(this);
+    }
+
+    private void rotten() {
+        isFresh = false;
+        figure.setColor(eventColor);
+    }
 
     public Food(int x, int y) {
         super(Configuration.foodDefaultColor, Configuration.foodEventColor, Configuration.foodSize, Configuration.foodThickness);
@@ -15,30 +29,25 @@ public class Food extends Entity {
         figure = new Square(x, y, defaultColor, size, thickness);
         freshTimer = Configuration.freshTimer;
         isFresh = true;
-        thread.start();
+
+        lifeTimer = new Timer();
+
+        lifeTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                rotten();
+            }
+        }, freshTimer);
+
+        lifeTimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                delete();
+            }
+        }, 3 * freshTimer / 2);
     }
 
     public boolean isFresh() {
         return isFresh;
-    }
-
-    @Override
-    public void run() {
-        try {
-            Thread.sleep(freshTimer);
-        } catch (InterruptedException e) {
-            thread.interrupt();
-        }
-
-        isFresh = false;
-        figure.setColor(eventColor);
-
-        try {
-            Thread.sleep(freshTimer / 2);
-        } catch (InterruptedException e) {
-            thread.interrupt();
-        }
-
-        World.removeFood(this);
     }
 }

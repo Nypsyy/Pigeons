@@ -1,30 +1,32 @@
 package Window;
 
-import Object.Pigeon;
 import Object.Food;
+import Object.Pigeon;
+import Object.PigeonEat;
+import Object.PigeonRun;
+import Object.PigeonThreatened;
 
 import java.util.ArrayList;
 
 public class World {
     private static ArrayList<Pigeon> pigeons;
+    private static ArrayList<PigeonRun> pigeonRuns;
+    private static ArrayList<PigeonEat> pigeonEats;
+    private static ArrayList<PigeonThreatened> pigeonTheateneds;
+
     private static ArrayList<Food> food = null;
 
     public synchronized static void removeFood(Food f) {
         if (f != null) {
-            if (f.getThread().isAlive())
-                f.getThread().interrupt();
             food.remove(f);
-        }
-    }
-
-    public synchronized static void resetPigeonThreateningTimers() {
-        for (Pigeon p : pigeons) {
-            p.resetThreatening();
         }
     }
 
     public World() {
         pigeons = new ArrayList<>();
+        pigeonRuns = new ArrayList<>();
+        pigeonEats = new ArrayList<>();
+        pigeonTheateneds = new ArrayList<>();
         food = new ArrayList<>();
     }
 
@@ -41,11 +43,11 @@ public class World {
     }
 
     public synchronized static void eatFood(Food freshFood) {
-        if (freshFood.getThread().isAlive())
-            freshFood.getThread().interrupt();
+        for (PigeonThreatened pt : pigeonTheateneds) {
+            pt.setThreatenedTimer();
+        }
 
-        resetPigeonThreateningTimers();
-
+        freshFood.lifeTimer.cancel();
         removeFood(freshFood);
     }
 
@@ -54,16 +56,26 @@ public class World {
     }
 
     public void addPigeon(int x, int y) {
-        pigeons.add(new Pigeon(x, y));
+        Pigeon p = new Pigeon(x, y);
+
+        pigeons.add(p);
+        pigeonRuns.add(new PigeonRun(p));
+        pigeonEats.add(new PigeonEat(p));
+        pigeonTheateneds.add(new PigeonThreatened(p));
     }
 
     public synchronized void resetWorld() {
-        for (Pigeon p : pigeons)
-            p.getThread().interrupt();
-        pigeons.clear();
+        for (int i = 0; i < pigeons.size(); i++) {
+            pigeonRuns.get(i).interrupt();
+            pigeonEats.get(i).interrupt();
+            pigeonTheateneds.get(i).interrupt();
+        }
 
-        for (Food f : food)
-            f.getThread().interrupt();
+        pigeons.clear();
+        pigeonRuns.clear();
+        pigeonEats.clear();
+        pigeonTheateneds.clear();
+
         food.clear();
     }
 }
