@@ -9,9 +9,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Drawing extends JPanel {
-    private final World world;
+    private final Game world;
 
-    public Drawing(World world) {
+    public Drawing(Game world) {
         this.world = world;
 
         initClickListener();
@@ -23,15 +23,13 @@ public class Drawing extends JPanel {
         super.paintComponent(g);
 
         synchronized (world.getPigeons()) {
-            for (Pigeon pigeon : world.getPigeons()) {
+            for (Pigeon pigeon : world.getPigeons())
                 pigeon.getFigure().draw(g);
-            }
         }
 
         synchronized (world.getFood()) {
-            for (Food food : world.getFood()) {
+            for (Food food : world.getFood())
                 food.getFigure().draw(g);
-            }
         }
     }
 
@@ -44,17 +42,16 @@ public class Drawing extends JPanel {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                if (e.getButton() == MouseEvent.BUTTON1) {
+                if (e.getButton() == MouseEvent.BUTTON1)
                     synchronized (world.getFood()) {
                         world.addFood(e.getX(), e.getY());
                     }
-                } else if (e.getButton() == MouseEvent.BUTTON3) {
+                else if (e.getButton() == MouseEvent.BUTTON3)
                     synchronized (world.getPigeons()) {
                         world.addPigeon(e.getX(), e.getY());
                     }
-                } else if (e.getButton() == MouseEvent.BUTTON2) {
+                else if (e.getButton() == MouseEvent.BUTTON2)
                     world.resetWorld();
-                }
             }
         });
     }

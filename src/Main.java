@@ -1,11 +1,12 @@
 import Window.Window;
 import Window.Drawing;
-import Window.World;
+import Window.Game;
+import Window.Configuration;
 
 public class Main {
     public static void main(String[] args) {
-        World world = new World();
-        Drawing drawing = new Drawing(world);
-        new Window("Pigeons Simulator", 960, 720, drawing);
+        Game game = new Game();
+        Drawing drawing = new Drawing(game);
+        new Window(Configuration.WindowName, Configuration.WindowWidth, Configuration.WindowHeight, drawing);
     }
 }

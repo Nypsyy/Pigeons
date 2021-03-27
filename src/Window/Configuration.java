@@ -3,6 +3,10 @@ package Window;
 import java.awt.*;
 
 public class Configuration {
+    public static final String WindowName = "Pigeons Simulator";
+    public static final int WindowWidth = 960;
+    public static final int WindowHeight = 720;
+
     public static final Color foodDefaultColor = Color.GREEN;
     public static final Color foodEventColor = Color.RED;
     public static final int foodSize = 10;

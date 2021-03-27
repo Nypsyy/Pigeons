@@ -3,51 +3,52 @@ package Object;
 import Shape.Square;
 
 import Window.Configuration;
-import Window.World;
+import Window.Game;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Food extends Entity {
-    private final int freshTimer;
-    private boolean isFresh;
+	public Timer lifeTimer;
+	private boolean isFresh;
 
-    public Timer lifeTimer;
+	public Food(int x, int y) {
+		super(Configuration.foodDefaultColor, Configuration.foodEventColor, Configuration.foodSize, Configuration.foodThickness);
 
-    private void delete() {
-        World.removeFood(this);
-    }
+		figure = new Square(x, y, defaultColor, size, thickness);
+		isFresh = true;
 
-    private void rotten() {
-        isFresh = false;
-        figure.setColor(eventColor);
-    }
+		initTimer();
+	}
 
-    public Food(int x, int y) {
-        super(Configuration.foodDefaultColor, Configuration.foodEventColor, Configuration.foodSize, Configuration.foodThickness);
+	private void initTimer() {
+		int freshTimer = Configuration.freshTimer;
 
-        figure = new Square(x, y, defaultColor, size, thickness);
-        freshTimer = Configuration.freshTimer;
-        isFresh = true;
+		lifeTimer = new Timer();
+		lifeTimer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				rotten();
+			}
+		}, freshTimer);
+		lifeTimer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				delete();
+			}
+		}, 3 * freshTimer / 2);
+	}
 
-        lifeTimer = new Timer();
+	private void rotten() {
+		isFresh = false;
+		figure.setColor(eventColor);
+	}
 
-        lifeTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                rotten();
-            }
-        }, freshTimer);
+	private void delete() {
+		Game.removeFood(this);
+	}
 
-        lifeTimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                delete();
-            }
-        }, 3 * freshTimer / 2);
-    }
-
-    public boolean isFresh() {
-        return isFresh;
-    }
+	public boolean isFresh() {
+		return isFresh;
+	}
 }

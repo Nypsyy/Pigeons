@@ -22,4 +22,12 @@ public abstract class Entity {
     public Figure getFigure() {
         return figure;
     }
+
+    public int getSize() {
+        return size;
+    }
+
+    public Color getDefaultColor() {
+        return defaultColor;
+    }
 }

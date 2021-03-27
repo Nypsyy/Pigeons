@@ -2,13 +2,13 @@ package Window;
 
 import Object.Food;
 import Object.Pigeon;
-import Object.PigeonEat;
-import Object.PigeonRun;
-import Object.PigeonThreatened;
+import Action.PigeonEat;
+import Action.PigeonRun;
+import Action.PigeonThreatened;
 
 import java.util.ArrayList;
 
-public class World {
+public class Game {
     private static ArrayList<Pigeon> pigeons;
     private static ArrayList<PigeonRun> pigeonRuns;
     private static ArrayList<PigeonEat> pigeonEats;
@@ -16,13 +16,7 @@ public class World {
 
     private static ArrayList<Food> food = null;
 
-    public synchronized static void removeFood(Food f) {
-        if (f != null) {
-            food.remove(f);
-        }
-    }
-
-    public World() {
+    public Game() {
         pigeons = new ArrayList<>();
         pigeonRuns = new ArrayList<>();
         pigeonEats = new ArrayList<>();
@@ -42,15 +36,6 @@ public class World {
         return food.size() > 0 && food.get(food.size() - 1).isFresh() ? food.get(food.size() - 1) : null;
     }
 
-    public synchronized static void eatFood(Food freshFood) {
-        for (PigeonThreatened pt : pigeonTheateneds) {
-            pt.setThreatenedTimer();
-        }
-
-        freshFood.lifeTimer.cancel();
-        removeFood(freshFood);
-    }
-
     public void addFood(int x, int y) {
         food.add(new Food(x, y));
     }
@@ -64,11 +49,24 @@ public class World {
         pigeonTheateneds.add(new PigeonThreatened(p));
     }
 
+    public synchronized static void eatFood(Food freshFood) {
+        for (PigeonThreatened pt : pigeonTheateneds)
+            pt.setThreatenedTimer();
+
+        freshFood.lifeTimer.cancel();
+        removeFood(freshFood);
+    }
+
+    public synchronized static void removeFood(Food f) {
+        if (f != null)
+            food.remove(f);
+    }
+
     public synchronized void resetWorld() {
         for (int i = 0; i < pigeons.size(); i++) {
-            pigeonRuns.get(i).interrupt();
-            pigeonEats.get(i).interrupt();
-            pigeonTheateneds.get(i).interrupt();
+            pigeonRuns.get(i).interruptAction();
+            pigeonEats.get(i).interruptAction();
+            pigeonTheateneds.get(i).interruptAction();
         }
 
         pigeons.clear();
