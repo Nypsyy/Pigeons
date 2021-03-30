@@ -11,14 +11,27 @@ public class Point {
         this.y = y;
     }
 
+    /**
+     * Récupère la coordonnée x du point
+     * @return
+     */
     public int getX() {
         return this.x;
     }
 
+    /**
+     * Récupère la coordonnée y du point
+     * @return
+     */
     public int getY() {
         return this.y;
     }
 
+    /**
+     * Modifie les coordonnées
+     * @param x
+     * @param y
+     */
     public void update(int x, int y) {
         this.x += x;
         this.y += y;

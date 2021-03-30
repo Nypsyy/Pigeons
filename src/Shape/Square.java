@@ -7,6 +7,10 @@ public class Square extends Figure {
 		super(x, y, color, thickness, length);
 	}
 
+	/**
+	 * Dessine un carré
+	 * @param g
+	 */
 	@Override
 	public void draw(Graphics g) {
 		super.draw(g);

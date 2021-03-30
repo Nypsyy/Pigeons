@@ -7,6 +7,10 @@ public class Circle extends Figure {
         super(x, y, color, thickness, radius);
     }
 
+    /**
+     * Dessine un cercle
+     * @param g
+     */
     @Override
     public void draw(Graphics g) {
         super.draw(g);
