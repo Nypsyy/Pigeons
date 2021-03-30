@@ -22,7 +22,7 @@ public class Food extends Entity {
 	}
 
 	private void initTimer() {
-		int freshTimer = Configuration.freshTimer;
+		int freshTimer = Configuration.freshTimer * 1000;
 
 		lifeTimer = new Timer();
 		lifeTimer.schedule(new TimerTask() {

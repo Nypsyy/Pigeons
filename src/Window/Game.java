@@ -12,7 +12,7 @@ public class Game {
     private static ArrayList<Pigeon> pigeons;
     private static ArrayList<PigeonRun> pigeonRuns;
     private static ArrayList<PigeonEat> pigeonEats;
-    private static ArrayList<PigeonThreatened> pigeonTheateneds;
+    private static ArrayList<PigeonThreatened> pigeonThreatened;
 
     private static ArrayList<Food> food = null;
 
@@ -20,7 +20,7 @@ public class Game {
         pigeons = new ArrayList<>();
         pigeonRuns = new ArrayList<>();
         pigeonEats = new ArrayList<>();
-        pigeonTheateneds = new ArrayList<>();
+        pigeonThreatened = new ArrayList<>();
         food = new ArrayList<>();
     }
 
@@ -46,11 +46,11 @@ public class Game {
         pigeons.add(p);
         pigeonRuns.add(new PigeonRun(p));
         pigeonEats.add(new PigeonEat(p));
-        pigeonTheateneds.add(new PigeonThreatened(p));
+        pigeonThreatened.add(new PigeonThreatened(p));
     }
 
     public synchronized static void eatFood(Food freshFood) {
-        for (PigeonThreatened pt : pigeonTheateneds)
+        for (PigeonThreatened pt : pigeonThreatened)
             pt.setThreatenedTimer();
 
         freshFood.lifeTimer.cancel();
@@ -66,13 +66,13 @@ public class Game {
         for (int i = 0; i < pigeons.size(); i++) {
             pigeonRuns.get(i).interruptAction();
             pigeonEats.get(i).interruptAction();
-            pigeonTheateneds.get(i).interruptAction();
+            pigeonThreatened.get(i).interruptAction();
         }
 
         pigeons.clear();
         pigeonRuns.clear();
         pigeonEats.clear();
-        pigeonTheateneds.clear();
+        pigeonThreatened.clear();
 
         food.clear();
     }

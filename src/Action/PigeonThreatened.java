@@ -41,7 +41,7 @@ public class PigeonThreatened extends EntityAction {
         boolean arrived = false;
 
         pigeon.setThreatened(true);
-        Point pt = new Point(pigeonPos.getX() + new Random().nextInt(60), pigeonPos.getY() + new Random().nextInt(60));
+        Point pt = new Point(pigeonPos.getX() + new Random().nextInt(200) - 100, pigeonPos.getY() + new Random().nextInt(200) - 100);
 
         while (!arrived) {
             Thread.sleep(Configuration.screenRefreshRate);
